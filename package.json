@@ -1,6 +1,6 @@
 {
   "name": "grounds-keeper",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "GraphQL monitoring",
   "main": "lib/index.js",
   "scripts": {
