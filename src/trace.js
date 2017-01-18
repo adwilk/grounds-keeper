@@ -41,10 +41,10 @@ const createFieldMap = (schema, operation, fragments) => {
 };
 
 const addQueryReport = (context, {
+  startOffset,
   info: { operation, fragments },
-  startOffset: startOffsetQuery,
   resolvers: queryResolvers = []
-}) => {
+}, endOffset) => {
   const schema = context.queries[0].info.schema;
   const fields = createFieldMap(schema, operation, fragments);
   
@@ -52,7 +52,7 @@ const addQueryReport = (context, {
     addResolverReport(fields, queryResolver));
 
   context.report.queries.push({
-    duration: timeToNanos(process.hrtime(context.start)), // figure out time up to next queries startOffset
+    latency: timeToNanos(endOffset) - timeToNanos(startOffset), 
     name: operation && operation.name && operation.name.value,
     fields
   });
@@ -84,12 +84,18 @@ const end = (fn, req) => {
 
 	if(!context.queries || !context.queries.length) return;
 
-	context.report.duration = timeToNanos(process.hrtime(context.start));
+  const endTime = process.hrtime(context.start);
+
+	context.report.latency = timeToNanos(endTime);
 
   mapResolversToQueries(context);
 
-  context.queries.forEach(queryReport => 
-    addQueryReport(context, queryReport));
+  context.queries.forEach((queryReport, index) => {
+    const endOffset = context.queries.length > index + 1 ?
+      context.queries[index + 1].startOffset : endTime;
+
+    addQueryReport(context, queryReport, endOffset);
+  });
 
 	fn(JSON.stringify({ groundsKeeper: context.report }));
 };

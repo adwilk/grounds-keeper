@@ -9,6 +9,7 @@ Generates simple usage/latency reports for GraphQL Express servers.
 {
    "groundsKeeper":{
       "queries":[ { // support multiple queries for Apollo Server
+         "latency": 23532412 // total query latency in nanoseconds
          "name":"QueryName", // prints operation name
          "fields":{ // list requested fields by type
             "Query":{
@@ -29,7 +30,7 @@ Generates simple usage/latency reports for GraphQL Express servers.
       "client":"::ffff:172.19.0.1", // requesting remote address
       "referer":"http://localhost:8080/graphiql", // request referer
       "timeStamp":1484537683332, // timestamp of request 
-      "duration":4155815954 // total response time in nanoseconds
+      "latency":4155815954 // total response latency in nanoseconds
    }
 }
 ```

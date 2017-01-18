@@ -86,10 +86,11 @@ export default schema => {
 		if (!context.queries) {
 	    context.queries = [];
 	  }
-
+    
     context.queries.push({
 	    info,
-	    resolvers: []
+	    resolvers: [],
+      startOffset: process.hrtime(context.start)
 	  });
 
 	  return root;
